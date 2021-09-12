@@ -45,7 +45,7 @@ export default function Login(props: Props) {
     return (
         <Layout style={{flex: 1}}>
             <Header
-                name="arrow-ios-back-outline"
+                name="arrow-back-outline"
                 onPress={() => navigate('BlogScreen')}
             />
             <Controller

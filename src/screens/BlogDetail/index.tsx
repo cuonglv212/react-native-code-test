@@ -1,6 +1,6 @@
 import React from "react";
-import {View, Image, ScrollView, StyleSheet} from "react-native";
-import {Header} from "../../components";
+import {View, ScrollView, StyleSheet} from "react-native";
+import {Header, Image} from "../../components";
 import moment from "moment";
 import {Layout, Text} from "@ui-kitten/components";
 
@@ -19,17 +19,17 @@ export default function Blog({ navigation, route: { params } }: Props) {
         <Layout>
             <Header
                 title={'BLOG DETAIL'}
-                name="arrow-ios-back-outline"
+                name="arrow-back-outline"
                 onPress={() => navigation.goBack()}
-            />
-            <Image
-                source={{ uri: blog.imageUrl }}
-                style={styles.image}
             />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 style={styles.scrollview}
             >
+                <Image
+                    source={{ uri: blog.imageUrl }}
+                    style={styles.image}
+                />
                 <View
                     style={{
                         padding: 20,
@@ -43,7 +43,6 @@ export default function Blog({ navigation, route: { params } }: Props) {
                         {moment(blog.datePublished).format("MMMM Do YYYY")}
                     </Text>
                     <Text style={styles.content}>{blog.content}</Text>
-                    <View style={{ margin: 150 }} />
                 </View>
             </ScrollView>
         </Layout>
@@ -56,6 +55,7 @@ const styles = StyleSheet.create({
         height: 250,
     },
     scrollview: {
+        marginBottom: 20
     },
     contentBox: {
         borderTopLeftRadius: 20,

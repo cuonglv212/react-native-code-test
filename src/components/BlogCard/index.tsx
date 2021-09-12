@@ -1,8 +1,9 @@
 import React from "react";
-import {TouchableOpacity, Image, Text, StyleSheet} from "react-native";
+import {TouchableOpacity, Text, StyleSheet} from "react-native";
 import {BlogType} from "../../screens/Blogs";
 import {screenSize} from "../../styles";
 import {color} from "../../styles/color";
+import {Image} from "../index";
 
 type Props = {
     blog: BlogType;
