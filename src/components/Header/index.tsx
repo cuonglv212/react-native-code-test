@@ -1,31 +1,38 @@
 import React from "react";
 import {StyleSheet, TouchableOpacity, View} from "react-native";
-import { Icon, Text } from "@ui-kitten/components";
-import {screenSize} from "../../styles";
+import {Icon, Layout, Text} from "@ui-kitten/components";
+import {color} from "../../styles/color";
 
 type Props = {
     onPress: () => void;
     name: string;
+    nameRight?: string;
+    onPressRight?: () => void;
+    title?: string;
 };
 
-export default function Header({ onPress, name }: Props) {
+export default function Header({ onPress, name, onPressRight, nameRight, title }: Props) {
     return (
-        <TouchableOpacity onPress={onPress} style={styles.container}>
-            <Icon style={styles.icon} fill="#8F9BB3" name={name} />
-
-            <Text style={styles.textHeader}>Header</Text>
-        </TouchableOpacity>
+        <Layout style={styles.container}>
+            <TouchableOpacity onPress={onPress}>
+                <Icon style={styles.icon} fill="#8F9BB3" name={name} />
+            </TouchableOpacity>
+            <Text style={styles.textHeader}>{title || 'Header'}</Text>
+            {nameRight && <TouchableOpacity onPress={onPressRight}>
+                <Icon style={styles.icon} fill="#8F9BB3" name={nameRight}/>
+            </TouchableOpacity>}
+        </Layout>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        backgroundColor: "white",
+        height: 40,
         alignItems: "center",
         justifyContent: "center",
         flexDirection: 'row',
-        paddingHorizontal: 15
+        paddingHorizontal: 15,
     },
     icon: {
         width: 24,

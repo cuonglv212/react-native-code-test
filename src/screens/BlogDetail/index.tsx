@@ -1,7 +1,8 @@
 import React from "react";
-import {View, Text, Image, ScrollView, StyleSheet} from "react-native";
-import {BackButton} from "../../components";
+import {View, Image, ScrollView, StyleSheet} from "react-native";
+import {Header} from "../../components";
 import moment from "moment";
+import {Layout, Text} from "@ui-kitten/components";
 
 
 type Props = {
@@ -15,8 +16,9 @@ export default function Blog({ navigation, route: { params } }: Props) {
     const { blog } = params;
 
     return (
-        <View style={{ backgroundColor: "white" }}>
-            <BackButton
+        <Layout>
+            <Header
+                title={'BLOG DETAIL'}
                 name="arrow-ios-back-outline"
                 onPress={() => navigation.goBack()}
             />
@@ -30,7 +32,6 @@ export default function Blog({ navigation, route: { params } }: Props) {
             >
                 <View
                     style={{
-                        backgroundColor: "white",
                         padding: 20,
                     }}
                 >
@@ -45,7 +46,7 @@ export default function Blog({ navigation, route: { params } }: Props) {
                     <View style={{ margin: 150 }} />
                 </View>
             </ScrollView>
-        </View>
+        </Layout>
     );
 }
 
@@ -57,14 +58,12 @@ const styles = StyleSheet.create({
     scrollview: {
     },
     contentBox: {
-        backgroundColor: "#fff",
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     title: {
         fontFamily: "Roboto-Bold",
         fontSize: 18,
-        color: "#3a3b3c",
     },
     author: {
         fontSize: 13,
@@ -78,7 +77,6 @@ const styles = StyleSheet.create({
     },
     content: {
         fontSize: 15,
-        color: "#3a3b3c",
         letterSpacing: 0.5,
         lineHeight: 20,
         textAlign: "justify",

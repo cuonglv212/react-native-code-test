@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import {StyleSheet, TouchableOpacity} from "react-native";
 import { Input, Button, Layout, Text, Icon } from "@ui-kitten/components";
 import Header from "../../components/Header";
@@ -6,6 +6,7 @@ import {navigate} from "../../navigation";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {ContextData} from "../../context";
 
 type Props = {
 };
@@ -35,7 +36,10 @@ export default function Login(props: Props) {
     } = useForm<LoginType>({ resolver: yupResolver(YupLogin) });
     const [showPassword, setShowPassword] = useState<boolean>(true);
     const [isLoginProcess, setIsLoginProcess] = useState<boolean>(true);
+    const { setLogin } = useContext(ContextData);
     const onSubmit = handleSubmit(({ email, password }) => {
+        setLogin(true);
+        navigate('BlogScreen')
     });
 
     return (
@@ -57,7 +61,7 @@ export default function Login(props: Props) {
                 )}
                 name="email"
                 rules={{ required: true }}
-                defaultValue=""
+                defaultValue="123@456.com"
             />
             {errors.email && (
                 <Text style={styles.textError}>{errors.email.message}</Text>

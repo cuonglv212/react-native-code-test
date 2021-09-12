@@ -1,3 +1,3 @@
 export const color = {
-    // button: ''
+    white: 'rgb(255 ,255 ,255)'
 };

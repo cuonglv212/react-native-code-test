@@ -2,13 +2,14 @@ import React from "react";
 import {TouchableOpacity, Image, Text, StyleSheet} from "react-native";
 import {BlogType} from "../../screens/Blogs";
 import {screenSize} from "../../styles";
+import {color} from "../../styles/color";
 
 type Props = {
     blog: BlogType;
     onPress: () => void;
 };
 
-export default function BackButton({ blog, onPress }: Props) {
+export default function Header({ blog, onPress }: Props) {
     return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
         <Image
@@ -19,19 +20,20 @@ export default function BackButton({ blog, onPress }: Props) {
             style={styles.image}
         />
         <Text style={styles.text}>{blog.title}</Text>
+        <Text style={styles.text}>{blog.author}</Text>
     </TouchableOpacity>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: screenSize.width * 0.8,
+        width: '100%',
         marginTop: 20,
         borderRadius: 10,
-        backgroundColor: "white",
+        backgroundColor: color.white,
         shadowColor: "#000",
         shadowOffset: {
-            width: 0,
+            width: 1,
             height: 2,
         },
         shadowOpacity: 0.25,
@@ -41,14 +43,16 @@ const styles = StyleSheet.create({
     },
     image: {
         width: "100%",
-        height: screenSize.width * 0.4,
+        height: 120,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
     },
     text: {
-        marginVertical: 15,
+        marginVertical: 5,
         fontFamily: "Roboto-Bold",
         marginHorizontal: 12,
         color: "grey",
     },
+    textContent: {
+    }
 });
