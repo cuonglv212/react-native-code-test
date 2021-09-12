@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react";
-import {StyleSheet, TouchableOpacity} from "react-native";
+import {ActivityIndicator, StyleSheet, TouchableOpacity, View} from "react-native";
 import { Input, Button, Layout, Text, Icon } from "@ui-kitten/components";
 import Header from "../../components/Header";
 import {navigate} from "../../navigation";
@@ -7,6 +7,8 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {ContextData} from "../../context";
+import { auth } from "firebase";
+import {SCREENS} from "../../constant";
 
 type Props = {
 };
@@ -36,14 +38,78 @@ export default function Login(props: Props) {
     } = useForm<LoginType>({ resolver: yupResolver(YupLogin) });
     const [showPassword, setShowPassword] = useState<boolean>(true);
     const [isLoginProcess, setIsLoginProcess] = useState<boolean>(true);
+    const [isLoading, setLoading] = useState<boolean>(false);
     const { setLogin } = useContext(ContextData);
-    const onSubmit = handleSubmit(({ email, password }) => {
-        setLogin(true);
-        navigate('BlogScreen')
-    });
+    const onSubmit = ({ email, password }: {email: string, password: string}) => {
+        setLoading(true);
+        if (isLoginProcess) {
+            auth()
+                .signInWithEmailAndPassword(
+                    email.trim().toLocaleLowerCase(),
+                    password
+                )
+                .then(() => {
+                    setLogin(true);
+                    setLoading(false);
+                    navigate(SCREENS.BlogScreen);
+                })
+                .catch((error: any) => {
+                    console.log(error)
+                    if (error.code === "auth/wrong-password") {
+                        alert(
+                            "The password is invalid or the user does not have a password"
+                        );
+                    }
+                    if (error.code === "auth/invalid-email") {
+                        alert("That email address is invalid!");
+                    }
+                    if (error.code === "auth/user-not-found") {
+                        alert(
+                            "User corresponding to that email does not exist"
+                        );
+                    }
+                    if (error.code === "auth/weak-password") {
+                        alert("Your password is not strong enough");
+                    }
+                    if (error.code === "auth/network-request-failed") {
+                        alert("Network error");
+                    }
+                    setLoading(false);
+                });
+        } else {
+            auth()
+                .createUserWithEmailAndPassword(
+                    email.trim().toLocaleLowerCase(),
+                    password
+                )
+                .then(() => {
+                    setLoading(false);
+                    alert("That account was created successful!");
+                })
+                .catch((error: any) => {
+                    if (error.code === "auth/email-already-in-use") {
+                        alert("That email address is already in use!");
+                    }
+                    if (error.code === "auth/invalid-email") {
+                        alert("That email address is invalid!");
+                    }
+                    console.error(error);
+                    setLoading(false);
+                });
+        }
+    };
+
+    const renderLoading = () => {
+        return(
+            <Layout style={{width: '100%', height: '100%', zIndex: 10, backgroundColor: 'transparent', position: 'absolute'}}>
+                <ActivityIndicator size={'large'} style={styles.loading}/>
+            </Layout>
+        );
+    };
 
     return (
         <Layout style={{flex: 1}}>
+            {isLoading && renderLoading()}
             <Header
                 name="arrow-back-outline"
                 onPress={() => navigate('BlogScreen')}
@@ -61,7 +127,7 @@ export default function Login(props: Props) {
                 )}
                 name="email"
                 rules={{ required: true }}
-                defaultValue="123@456.com"
+                defaultValue="123@gmail.com"
             />
             {errors.email && (
                 <Text style={styles.textError}>{errors.email.message}</Text>
@@ -99,7 +165,7 @@ export default function Login(props: Props) {
             <Button
                 status="info"
                 style={styles.button}
-                onPress={() => onSubmit()}
+                onPress={handleSubmit?.(onSubmit)}
             >
                 {isLoginProcess ? "LOGIN" : "REGISTER"}
             </Button>
@@ -136,4 +202,5 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
     },
+    loading: {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}
 });

@@ -10,6 +10,23 @@ import {ContextData} from "./src/context";
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
+import firebase from "firebase";
+const firebaseConfig = {
+  apiKey: "AIzaSyArH2jzINa2DgXrIK3uGoNwURQNc6uta60",
+  authDomain: "stayr-34812.firebaseapp.com",
+  projectId: "stayr-34812",
+  storageBucket: "stayr-34812.appspot.com",
+  messagingSenderId: "853030024768",
+  appId: "1:853030024768:web:f62a5c904eb5a23c6bd1a5",
+  measurementId: "G-XCRT6EEE8P"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app(); // if already initialized, use that one
+}
+
 const App = () => {
   const [loaded, error] = useFonts({
     Roboto: require("./assets/fonts/Roboto/Roboto.ttf"),
