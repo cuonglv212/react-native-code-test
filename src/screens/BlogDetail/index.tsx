@@ -22,16 +22,17 @@ export default function Blog({ navigation, route: { params } }: Props) {
     const [identifier, setIdentifier] = useState('')
 
     const getNotificationIdentifier = useCallback(async () => {
-        let identifier = await getIdentifier(blog.id)
+        let identifier = await getIdentifier(blog.title)
         console.log('getIdentifier identifier', identifier)
         if (!identifier) {
             identifier = await schedulePushNotification({
                 title: 'This Article is still waiting to come back',
                 body: blog.title,
+                data: { data: JSON.stringify(blog) }
             })
             console.log('identifier', identifier)
-            saveIdentifier({
-                id: blog.id,
+            await saveIdentifier({
+                id: blog.title,
                 identifier
             })
             setIdentifier(identifier)
@@ -44,8 +45,8 @@ export default function Blog({ navigation, route: { params } }: Props) {
         if (identifier) {
             console.log('clearNofitication', identifier)
             setIdentifier('')
-            removeIdentifier(blog.id)
-            cancelScheduledNotificationAsync(identifier)
+            await removeIdentifier(blog.title)
+            await cancelScheduledNotificationAsync(identifier)
         }
     }, [identifier])
 

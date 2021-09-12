@@ -18,7 +18,7 @@ export const removeIdentifier = async  (id: string) => {
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: false,
+    shouldShowAlert: true,
     shouldPlaySound: false,
     shouldSetBadge: false,
   }),
@@ -28,17 +28,20 @@ Notifications.setNotificationHandler({
 export async function schedulePushNotification({
     title,
     body,
+    data,
 }: {
   title: string,
   body: string,
+  data: any
 }) {
     return Notifications.scheduleNotificationAsync({
       content: {
         title,
         body,
+        data,
       },
       trigger: {
-        seconds: 60,
+        seconds: 3*60*60,
         repeats: true,
       },
     });
@@ -72,7 +75,7 @@ export async function schedulePushNotification({
     }
 
     if (platform === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
+      await Notifications.setNotificationChannelAsync('default', {
         name: 'default',
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],

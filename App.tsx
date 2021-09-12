@@ -13,7 +13,6 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import firebase from "firebase";
 import {registerForPushNotificationsAsync} from "./src/utils/notifications";
 import * as Notifications from 'expo-notifications';
-import * as blogData from "./src/data/blogData.json";
 import {navigate} from "./src/navigation";
 import {SCREENS} from "./src/constant";
 const firebaseConfig = {
@@ -42,10 +41,10 @@ const App = () => {
       console.log('registered')
     })
     const subscription = Notifications.addNotificationResponseReceivedListener(response => {
-      // const getId = response.notification.request.content.body
+      console.log('res', response)
+      const getData = response.notification.request.content?.data?.data || '';
       // @ts-ignore
-      const item = blogData.blogs[0]
-      navigate(SCREENS.BlogDetailScreen, {blog: item})
+      navigate(SCREENS.BlogDetailScreen, {blog: JSON.parse(getData)})
     });
     return () => {
       // Clean up the event listeners

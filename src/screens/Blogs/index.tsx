@@ -1,8 +1,8 @@
-import React, {useContext, useMemo, useRef, useState} from "react";
-import {ActivityIndicator, FlatList, View} from "react-native";
+import React, {useContext, useState} from "react";
+import {ActivityIndicator, FlatList} from "react-native";
 import { Header, BlogCard } from "../../components";
 import { Layout } from "@ui-kitten/components";
-import { publiscStyle } from "../../styles";
+import { CommonStyle } from "../../styles";
 import * as blogData from "../../data/blogData.json";
 import {navigate} from "../../navigation";
 import _ from "lodash";
@@ -48,13 +48,14 @@ export default function Blogs( props : Props) {
         }
     };
 
-    const onSignOut = () => {
+    const onSignOut = async () => {
         setLogin(false);
-        cancelAllPushNotification();
+        await cancelAllPushNotification();
+        alert("Logout success!");
     };
 
     return (
-        <Layout style={publiscStyle.layout}>
+        <Layout style={CommonStyle.layout}>
             <Header
                 name={isLogin ? "log-out-outline" : "log-in-outline"}
                 onPress={() =>
