@@ -1,6 +1,6 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {ActivityIndicator, FlatList} from "react-native";
-import { Header, BlogCard } from "../../components";
+import {Header, BlogCard, Loading} from "../../components";
 import { Layout } from "@ui-kitten/components";
 import { CommonStyle } from "../../styles";
 import * as blogData from "../../data/blogData.json";
@@ -31,19 +31,29 @@ export default function Blogs( props : Props) {
     // @ts-ignore
     const allBlog = _.chunk<BlogType>(blogData.blogs, 5);
     const [page, setPage] = useState<number>(0);
-    const [data, setData] = useState<BlogType[]>(allBlog[0]);
+    const [data, setData] = useState<BlogType[]>([]);
+    const [isLoadMore, setLoadMore] = useState<boolean>(false);
     const [isLoading, setLoading] = useState<boolean>(false);
 
+
     const { isLight, setLightMode, isLogin, setLogin } = useContext(ContextData);
+
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+            setData(allBlog[0]);
+        }, 400);
+    }, []);
 
     const onLoadMore = () => {
         if (!onEndReachedCalledDuringMomentum) {
             onEndReachedCalledDuringMomentum = true;
-            setLoading(true);
+            setLoadMore(true);
             setTimeout(() => {
                 setPage(page + 1);
                 setData(data.concat(allBlog[page + 1]));
-                setLoading(false)
+                setLoadMore(false)
             }, 300);
         }
     };
@@ -56,6 +66,7 @@ export default function Blogs( props : Props) {
 
     return (
         <Layout style={CommonStyle.layout}>
+            <Loading isLoading={isLoading} />
             <Header
                 name={isLogin ? "log-out-outline" : "log-in-outline"}
                 onPress={() =>
@@ -89,7 +100,7 @@ export default function Blogs( props : Props) {
                         />
                     );
                 }}
-                ListFooterComponent={isLoading ? <ActivityIndicator size={"large"} style={{ margin: 20 }} /> : null}
+                ListFooterComponent={isLoadMore ? <ActivityIndicator size={"large"} style={{ margin: 20 }} /> : null}
                 onEndReached={onLoadMore}
                 onEndReachedThreshold={0}
                 onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false; }}

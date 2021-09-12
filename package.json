@@ -38,7 +38,8 @@
     "react-native-web": "~0.13.12",
     "undefined": "@hookform/resolvers/yu",
     "yup": "^0.32.9",
-    "expo-device": "~2.4.0"
+    "expo-device": "~2.4.0",
+    "lottie-react-native": "~2.6.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

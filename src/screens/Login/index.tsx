@@ -1,5 +1,13 @@
 import React, {useContext, useState} from "react";
-import {ActivityIndicator, StyleSheet, TouchableOpacity, View} from "react-native";
+import {
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    View
+} from "react-native";
 import { Input, Button, Layout, Text, Icon } from "@ui-kitten/components";
 import Header from "../../components/Header";
 import {navigate} from "../../navigation";
@@ -9,6 +17,9 @@ import * as yup from "yup";
 import {ContextData} from "../../context";
 import { auth } from "firebase";
 import {SCREENS} from "../../constant";
+import LottieView from 'lottie-react-native';
+import {screenSize} from "../../styles";
+import {Loading} from "../../components";
 
 type Props = {
 };
@@ -99,87 +110,100 @@ export default function Login(props: Props) {
         }
     };
 
-    const renderLoading = () => {
-        return(
-            <Layout style={{width: '100%', height: '100%', zIndex: 10, backgroundColor: 'transparent', position: 'absolute'}}>
-                <ActivityIndicator size={'large'} style={styles.loading}/>
-            </Layout>
-        );
-    };
-
     return (
         <Layout style={{flex: 1}}>
-            {isLoading && renderLoading()}
+            <Loading isLoading={isLoading} />
             <Header
                 name="arrow-back-outline"
+                title={"LOGIN"}
                 onPress={() => navigate('BlogScreen')}
             />
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                        placeholder="Email"
-                        onBlur={onBlur}
-                        style={!errors.email && styles.input}
-                        value={value}
-                        onChangeText={(nextValue) => onChange(nextValue)}
-                    />
-                )}
-                name="email"
-                rules={{ required: true }}
-                defaultValue="123@gmail.com"
-            />
-            {errors.email && (
-                <Text style={styles.textError}>{errors.email.message}</Text>
-            )}
-            <Controller
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                        placeholder="Password"
-                        style={!errors.password && styles.input}
-                        onBlur={onBlur}
-                        value={value}
-                        onChangeText={(nextValue) => onChange(nextValue)}
-                        secureTextEntry={showPassword}
-                        accessoryRight={() => (
-                            <TouchableOpacity
-                                onPress={() => setShowPassword(!showPassword)}
-                            >
-                                <Icon
-                                    style={styles.icon}
-                                    fill="#8F9BB3"
-                                    name={showPassword ? "eye-off" : "eye"}
+            <KeyboardAvoidingView
+                behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}>
+                <ScrollView
+                    style={{ paddingHorizontal: 25, flex: 1 }}
+                    contentContainerStyle={{alignItems: "center"}}>
+                    <View style={{paddingVertical: 15}}>
+                        <LottieView
+                            source={require("../../../assets/68312-login.json")}
+                            autoPlay
+                            loop
+                            style={styles.lottie}
+                        />
+                    </View>
+                    <View style={{width: '100%'}}>
+                        <Controller
+                            control={control}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <Input
+                                    placeholder="Email"
+                                    onBlur={onBlur}
+                                    style={!errors.email && styles.input}
+                                    value={value}
+                                    onChangeText={(nextValue) => onChange(nextValue)}
                                 />
-                            </TouchableOpacity>
+                            )}
+                            name="email"
+                            rules={{ required: true }}
+                            defaultValue="123@gmail.com"
+                        />
+                        {errors.email && (
+                            <Text style={styles.textError}>{errors.email.message}</Text>
                         )}
-                    />
-                )}
-                name="password"
-                rules={{ required: true }}
-                defaultValue=""
-            />
-            {errors.password && (
-                <Text style={styles.textError}>{errors.password.message}</Text>
-            )}
-            <Button
-                status="info"
-                style={styles.button}
-                onPress={handleSubmit?.(onSubmit)}
-            >
-                {isLoginProcess ? "LOGIN" : "REGISTER"}
-            </Button>
-            <Text style={{ marginTop: 20, alignSelf: "center" }}>
-                {isLoginProcess ? "Dont have account yet?" : "Have an account?"}
-            </Text>
-            <TouchableOpacity
-                onPress={() => setIsLoginProcess(!isLoginProcess)}
-                style={{ alignSelf: "center" }}
-            >
-                <Text style={{ fontFamily: "Roboto-Bold", margin: 10 }}>
-                    {isLoginProcess ? "Register here" : "Login Here"}
-                </Text>
-            </TouchableOpacity>
+                    </View>
+                    <View style={{width: '100%'}}>
+                        <Controller
+                            control={control}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <Input
+                                    placeholder="Password"
+                                    style={!errors.password && styles.input}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    onChangeText={(nextValue) => onChange(nextValue)}
+                                    secureTextEntry={showPassword}
+                                    accessoryRight={() => (
+                                        <TouchableOpacity
+                                            onPress={() => setShowPassword(!showPassword)}
+                                        >
+                                            <Icon
+                                                style={styles.icon}
+                                                fill="#8F9BB3"
+                                                name={showPassword ? "eye-off" : "eye"}
+                                            />
+                                        </TouchableOpacity>
+                                    )}
+                                />
+                            )}
+                            name="password"
+                            rules={{ required: true }}
+                            defaultValue=""
+                        />
+                        {errors.password && (
+                            <Text style={styles.textError}>{errors.password.message}</Text>
+                        )}
+                    </View>
+                    <Button
+                        status="info"
+                        style={styles.button}
+                        onPress={handleSubmit?.(onSubmit)}
+                    >
+                        {isLoginProcess ? "LOGIN" : "REGISTER"}
+                    </Button>
+                    <Text style={{ marginTop: 20, alignSelf: "center" }}>
+                        {isLoginProcess ? "Dont have account yet?" : "Have an account?"}
+                    </Text>
+                    <TouchableOpacity
+                        onPress={() => setIsLoginProcess(!isLoginProcess)}
+                        style={{ alignSelf: "center" }}
+                    >
+                        <Text style={{ fontFamily: "Roboto-Bold", margin: 10 }}>
+                            {isLoginProcess ? "Register here" : "Login Here"}
+                        </Text>
+                    </TouchableOpacity>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </Layout>
     );
 }
@@ -191,6 +215,7 @@ const styles = StyleSheet.create({
     button: {
         marginTop: 50,
         borderRadius: 10,
+        width: '100%'
     },
     textError: {
         color: "red",
@@ -202,5 +227,9 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
     },
-    loading: {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0}
+    loading: {position: 'absolute', top: 0, bottom: 0, right: 0, left: 0},
+    lottie: {
+        width: 400,
+        height: 200,
+    }
 });

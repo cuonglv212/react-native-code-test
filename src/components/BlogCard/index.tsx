@@ -10,22 +10,6 @@ type Props = {
     onPress: () => void;
 };
 
-export default function Header({ blog, onPress }: Props) {
-    return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-        <Image
-            resizeMode="cover"
-            source={{
-                uri: blog.imageUrl,
-            }}
-            style={styles.image}
-        />
-        <Text style={styles.text}>{blog.title}</Text>
-        <Text style={styles.text}>{blog.author}</Text>
-    </TouchableOpacity>
-    );
-}
-
 const styles = StyleSheet.create({
     container: {
         width: '100%',
@@ -57,3 +41,19 @@ const styles = StyleSheet.create({
     textContent: {
     }
 });
+
+export default function BlogCard({ blog, onPress }: Props) {
+    return (
+    <TouchableOpacity onPress={onPress} style={styles.container}>
+        <Image
+            resizeMode="cover"
+            source={{
+                uri: blog.imageUrl,
+            }}
+            style={styles.image}
+        />
+        <Text style={styles.text}>{blog.title}</Text>
+    </TouchableOpacity>
+    );
+}
+
