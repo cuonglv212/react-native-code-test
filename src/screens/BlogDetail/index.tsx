@@ -9,6 +9,7 @@ import {
     schedulePushNotification,
     cancelScheduledNotificationAsync
 } from '../../utils/notifications';
+import { MotiView } from "moti";
 
 type Props = {
     navigation: any;
@@ -55,6 +56,11 @@ export default function Blog({ navigation, route: { params } }: Props) {
     }, [])
 
     return (
+        <MotiView
+            from={{ translateY: -100 }}
+            animate={{ translateY: 0 }}
+            transition={{ type: 'timing', duration: 900 }}
+        >
         <Layout>
             <Header
                 title={'BLOG DETAIL'}
@@ -92,6 +98,7 @@ export default function Blog({ navigation, route: { params } }: Props) {
                 </View>
             </ScrollView>
         </Layout>
+        </MotiView>
     );
 }
 

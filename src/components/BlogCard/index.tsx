@@ -1,9 +1,9 @@
 import React from "react";
 import {TouchableOpacity, Text, StyleSheet} from "react-native";
 import {BlogType} from "../../screens/Blogs";
-import {screenSize} from "../../styles";
 import {color} from "../../styles/color";
 import {Image} from "../index";
+import {MotiView} from "moti";
 
 type Props = {
     blog: BlogType;
@@ -42,18 +42,39 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function BlogCard({ blog, onPress }: Props) {
+const BlogCard = ({ blog, onPress }: Props) => {
     return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-        <Image
-            resizeMode="cover"
-            source={{
-                uri: blog.imageUrl,
-            }}
-            style={styles.image}
-        />
-        <Text style={styles.text}>{blog.title}</Text>
-    </TouchableOpacity>
+    <MotiView
+        from={{
+            opacity: 0,
+            scale: 0.5,
+        }}
+        animate={{
+            opacity: 1,
+            scale: 1,
+        }}
+        transition={{
+            type: "timing",
+            duration: 1000,
+            // delay: 3000,
+        }}
+        exit={{
+            opacity: 0,
+            scale: 0.9,
+        }}
+    >
+        <TouchableOpacity onPress={onPress} style={styles.container}>
+            <Image
+                resizeMode="cover"
+                source={{
+                    uri: blog.imageUrl,
+                }}
+                style={styles.image}
+            />
+            <Text style={styles.text}>{blog.title}</Text>
+        </TouchableOpacity>
+    </MotiView>
     );
 }
 
+export default BlogCard;

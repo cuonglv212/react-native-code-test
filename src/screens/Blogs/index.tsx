@@ -43,7 +43,7 @@ export default function Blogs( props : Props) {
         setTimeout(() => {
             setLoading(false);
             setData(allBlog[0]);
-        }, 400);
+        }, 3000);
     }, []);
 
     const onLoadMore = () => {
