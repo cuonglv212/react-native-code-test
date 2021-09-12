@@ -1,9 +1,14 @@
-import React from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {View, ScrollView, StyleSheet} from "react-native";
 import {Header, Image} from "../../components";
 import moment from "moment";
 import {Layout, Text} from "@ui-kitten/components";
-
+import {
+    getIdentifier,
+    removeIdentifier, saveIdentifier,
+    schedulePushNotification,
+    cancelScheduledNotificationAsync
+} from '../../utils/notifications';
 
 type Props = {
     navigation: any;
@@ -14,6 +19,39 @@ type Props = {
 
 export default function Blog({ navigation, route: { params } }: Props) {
     const { blog } = params;
+    const [identifier, setIdentifier] = useState('')
+
+    const getNotificationIdentifier = useCallback(async () => {
+        let identifier = await getIdentifier(blog.id)
+        console.log('getIdentifier identifier', identifier)
+        if (!identifier) {
+            identifier = await schedulePushNotification({
+                title: 'This Article is still waiting to come back',
+                body: blog.title,
+            })
+            console.log('identifier', identifier)
+            saveIdentifier({
+                id: blog.id,
+                identifier
+            })
+            setIdentifier(identifier)
+        } else {
+            setIdentifier(identifier)
+        }
+    }, [blog])
+
+    const clearNotification = useCallback(async () => {
+        if (identifier) {
+            console.log('clearNofitication', identifier)
+            setIdentifier('')
+            removeIdentifier(blog.id)
+            cancelScheduledNotificationAsync(identifier)
+        }
+    }, [identifier])
+
+    useEffect(() => {
+        getNotificationIdentifier()
+    }, [])
 
     return (
         <Layout>
@@ -25,6 +63,13 @@ export default function Blog({ navigation, route: { params } }: Props) {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 style={styles.scrollview}
+                onScroll={event => {
+                    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent
+                    const percent = parseInt(String(((contentOffset.y + layoutMeasurement.height) / contentSize.height * 100)), 10)
+                    if (percent >= 70) {
+                        clearNotification()
+                    }
+                }}
             >
                 <Image
                     source={{ uri: blog.imageUrl }}

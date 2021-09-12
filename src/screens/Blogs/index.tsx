@@ -8,6 +8,7 @@ import {navigate} from "../../navigation";
 import _ from "lodash";
 import {ContextData} from "../../context";
 import {SCREENS} from "../../constant";
+import {cancelAllPushNotification} from "../../utils/notifications";
 
 export type BlogType = {
     title: string;
@@ -48,7 +49,8 @@ export default function Blogs( props : Props) {
     };
 
     const onSignOut = () => {
-        setLogin(false)
+        setLogin(false);
+        cancelAllPushNotification();
     };
 
     return (
