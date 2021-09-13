@@ -42,6 +42,7 @@ module.exports = {
 		"@typescript-eslint/no-empty-function": 0,
 		"react/prop-types": 0,
 		"react/display-name": 0,
+		"@typescript-eslint/ban-ts-comment": 0,
 		"import/order": [
 			2,
 			{
