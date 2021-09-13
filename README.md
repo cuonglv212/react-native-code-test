@@ -44,3 +44,9 @@ To learn more about some of the technologies used, take a look at the following 
 - [Yup](https://github.com/jquense/yup)
 - [react-native-shared-element](https://github.com/IjzerenHein/react-native-shared-element)
 - [Dayjs](https://day.js.org/)
+
+
+## Instalation guide
+1. yarn install
+2. go to node_modules/react-native-reanimated/src/reanimated2/core.js and comment out _setGlobalConsole(console)
+3. expo start
