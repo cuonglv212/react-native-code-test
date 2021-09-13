@@ -9,10 +9,10 @@ export type ContextDataState = {
 
 
 const initialState: ContextDataState = {
-    isLogin: false,
-    setLogin: () => {},
-    isLight: false,
-    setLightMode: () => {},
+	isLogin: false,
+	setLogin: () => {},
+	isLight: false,
+	setLightMode: () => {},
 };
 
 export const ContextData = React.createContext(initialState);
